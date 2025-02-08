@@ -51,9 +51,53 @@ Chip8::Chip8(){
         0xF0, 0x80, 0xF0, 0x80, 0x80  // F
     };
 
-    for (int i = 0; i < FONTSET_SIZE; ++i)
-	{
+    for (int i=0;i<FONTSET_SIZE;i++){
 		memory[FONTSET_START_ADDRESS + i] = fontset[i];
 	}
 
+    for(int x=0;x<64;x++){
+        for(int y=0;y<32;y++) screen[x][y] = false;
+    }
+
+}
+
+int Chip8::screenInit(){
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
+        return EXIT_FAILURE;
+    }
+
+    SDL_Window* pWindow{ nullptr };
+    SDL_Renderer* pRenderer{ nullptr };
+
+     if (SDL_CreateWindowAndRenderer(64*PIXEL_SIZE, 32*PIXEL_SIZE, SDL_WINDOW_SHOWN, &pWindow, &pRenderer) < 0)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
+        SDL_Quit();
+        return EXIT_FAILURE;
+    }
+}
+
+void Chip8::screenQuit(){
+    SDL_DestroyRenderer(pRenderer);
+    SDL_DestroyWindow(pWindow);
+    SDL_Quit();
+}
+
+void Chip8::screenUpdate(){
+    SDL_RenderClear(pRenderer);
+    SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
+    SDL_Rect pixel{ 0, 0, PIXEL_SIZE, PIXEL_SIZE };
+
+    for(int x=0;x<64;x++){
+        for(int y=0;y<32;y++){
+            if(screen[x][y]) SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
+            else SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 255);
+            pixel.x = x*PIXEL_SIZE;
+            pixel.y = y*PIXEL_SIZE;
+            SDL_RenderFillRect(pRenderer, &pixel);
+        }
+    }
+    SDL_RenderPresent(pRenderer);  
 }
