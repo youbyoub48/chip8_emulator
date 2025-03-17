@@ -1,12 +1,26 @@
-#include <SDL2/SDL.h>
+#include "chip8.h"
 
 int main(int argc, char* argv[])
 {
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
+    Chip8 chip8;
+    chip8.screenInit();
+    chip8.screenUpdate();
+    SDL_Event events;
+    bool isOpen{ true };
+
+     while (isOpen)
     {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[debug] %s", SDL_GetError());
-        return -1;
+         while (SDL_PollEvent(&events))
+        {
+            switch (events.type)
+            {
+            case SDL_QUIT:
+                isOpen = false;
+                break;
+            }
+        }
     }
-    SDL_Quit();
+
+    chip8.screenQuit();
     return 0;
 }

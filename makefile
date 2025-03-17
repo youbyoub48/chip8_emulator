@@ -1,2 +1,2 @@
 main:
-	g++ main.cpp -o main -lSDL2main -lSDL2
+	g++ main.cpp chip8.cpp -o main -lSDL2main -lSDL2

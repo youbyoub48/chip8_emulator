@@ -1,5 +1,8 @@
 #include "chip8.h"
 #include <fstream>
+#include <iostream>
+
+using namespace std;
 
 void Chip8::loadRom(const char* filename){
 	// Open the file as a stream of binary and move the file pointer to the end
@@ -68,15 +71,13 @@ int Chip8::screenInit(){
         return EXIT_FAILURE;
     }
 
-    SDL_Window* pWindow{ nullptr };
-    SDL_Renderer* pRenderer{ nullptr };
-
      if (SDL_CreateWindowAndRenderer(64*PIXEL_SIZE, 32*PIXEL_SIZE, SDL_WINDOW_SHOWN, &pWindow, &pRenderer) < 0)
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
         SDL_Quit();
         return EXIT_FAILURE;
     }
+    return 1;
 }
 
 void Chip8::screenQuit(){

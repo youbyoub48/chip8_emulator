@@ -25,4 +25,5 @@ class Chip8{
         int screenInit();
         void screenQuit();
         void screenUpdate();
+        void test();
 };
