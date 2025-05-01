@@ -138,3 +138,23 @@ void Chip8::OP_3xkk(){ //Skip next instruction if Vx = kk.
     uint8_t x = (opcode && 0x0F00) >> 8;
     if(V[x] == (opcode && 0x00FF)) pc += 2;
 }
+
+// 4xkk - SNE Vx, byte
+void Chip8::OP_4xkk(){ //Skip next instruction if Vx != kk.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    if(V[x] != (opcode && 0x00FF)) pc += 2;
+}
+
+// 5xy0 - SE Vx, Vy
+void Chip8::OP_5xy0(){ //Skip next instruction if Vx = Vy.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t y = (opcode && 0x00F0) >> 4;
+
+    if(V[x] == V[y]) pc += 2;
+}
+
+// 6xkk - LD Vx, byte
+void Chip8::OP_6xkk(){ //Set Vx = kk.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    V[x] = opcode & 0x00FF;
+}
