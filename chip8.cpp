@@ -105,10 +105,36 @@ void Chip8::screenUpdate(){
 
 //Instruction function
 
-void Chip8::OP_00E0(){
+// 00E0 - CLS
+void Chip8::OP_00E0(){ //Clear the display.
     for(int x=0;x<64;x++){
         for(int y=0;y<32;y++){
             screen[x][y] = false;
         }
     }
+}
+
+// 00EE - RET
+void Chip8::OP_00EE(){ //Return from a subroutine.
+    if (stack_count == 0) throw runtime_error("The Stack is empty 00EE");
+    stack_count--;
+    pc = stack[stack_count];
+}
+
+// 1nnn - JP addr
+void Chip8::OP_1nnn(){ //Jump to location nnn.
+    pc = opcode & 0x0FFF;
+}
+
+// 2nnn - CALL addr
+void Chip8::OP_2nnn(){ //Call subroutine at nnn.
+    stack[stack_count] = pc;
+    stack_count++;
+    pc = opcode & 0x0FFF;
+}
+
+// 3xkk - SE Vx, byte
+void Chip8::OP_3xkk(){ //Skip next instruction if Vx = kk.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    if(V[x] == (opcode && 0x00FF)) pc += 2;
 }
