@@ -102,3 +102,13 @@ void Chip8::screenUpdate(){
     }
     SDL_RenderPresent(pRenderer);  
 }
+
+//Instruction function
+
+void Chip8::OP_00E0(){
+    for(int x=0;x<64;x++){
+        for(int y=0;y<32;y++){
+            screen[x][y] = false;
+        }
+    }
+}
