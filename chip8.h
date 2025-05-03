@@ -8,7 +8,7 @@
 class Chip8{
     uint8_t V[16];
     uint8_t memory[4096];
-    uint16_t index;
+    uint16_t I;
     uint16_t pc;
     uint16_t stack[16];
     uint8_t stack_count;
@@ -40,4 +40,12 @@ class Chip8{
         void OP_8xy3();
         void OP_8xy4();
         void OP_8xy5();
+        void OP_8xy6();
+        void OP_8xy7();
+        void OP_8xyE();
+        void OP_9xy0();
+        void OP_Annn();
+        void OP_Bnnn();
+        void OP_Cxkk();
+        void OP_Dxyn();
 };

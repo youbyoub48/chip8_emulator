@@ -1,6 +1,7 @@
 #include "chip8.h"
 #include <fstream>
 #include <iostream>
+#include <ctime>
 
 using namespace std;
 
@@ -217,4 +218,61 @@ void Chip8::OP_8xy5(){ //Set Vx = Vx - Vy, set VF = NOT borrow.
     else V[0xF] = 0;
 
     V[x] -= V[y];
+}
+
+// 8xy6 - SHR Vx {, Vy}
+void Chip8::OP_8xy6(){ //Set Vx = Vx SHR 1.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    
+    V[0xF] = x & 0xF;
+    V[x] >>= 1;
+}
+
+// 8xy7 - SUBN Vx, Vy
+void Chip8::OP_8xy7(){ //Set Vx = Vy - Vx, set VF = NOT borrow.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t y = (opcode && 0x00F0) >> 4;
+
+    if(V[y] > V[x]) V[0xF] = 1;
+    else V[0xF] = 0;
+
+    V[x] = V[y]-V[x];
+}
+
+// 8xyE - SHL Vx {, Vy}
+void Chip8::OP_8xyE(){ //Set Vx = Vx SHL 1.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    
+    V[0xF] = x & 0xF;
+    V[x] <<= 1;
+}
+
+// 9xy0 - SNE Vx, Vy
+void Chip8::OP_9xy0(){ //Skip next instruction if Vx != Vy.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t y = (opcode && 0x00F0) >> 4;
+
+    if(V[x] != V[y]) pc += 2;
+}
+
+// Annn - LD I, addr
+void Chip8::OP_Annn(){ //Set I = nnn.
+    I = opcode & 0x0FFF;
+}
+
+// Bnnn - JP V0, addr
+void Chip8::OP_Bnnn(){ //Jump to location nnn + V0.
+    pc = (opcode & 0x0FFF)+V[0];
+}
+
+// Cxkk - RND Vx, byte
+void Chip8::OP_Cxkk(){ //Set Vx = random byte AND kk.
+    srand(time(0));
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    V[x] = (rand()%256) & (opcode & 0x00FF);
+}
+
+// Dxyn - DRW Vx, Vy, nibble
+void Chip8::OP_Dxyn(){ //Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
+    
 }
