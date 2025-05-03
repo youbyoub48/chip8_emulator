@@ -158,3 +158,63 @@ void Chip8::OP_6xkk(){ //Set Vx = kk.
     uint8_t x = (opcode && 0x0F00) >> 8;
     V[x] = opcode & 0x00FF;
 }
+
+// 7xkk - ADD Vx, byte
+void Chip8::OP_7xkk(){ //Set Vx = Vx + kk.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    V[x] += opcode & 0x00FF;
+}
+
+// 8xy0 - LD Vx, Vy
+void Chip8::OP_8xy0(){ //Set Vx = Vy.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t y = (opcode && 0x00F0) >> 4;
+    V[x] = V[y];
+}
+
+// 8xy1 - OR Vx, Vy
+void Chip8::OP_8xy1(){ //Set Vx = Vx OR Vy.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t y = (opcode && 0x00F0) >> 4;
+    V[x] |= V[y];
+}
+
+// 8xy2 - AND Vx, Vy
+void Chip8::OP_8xy2(){ //Set Vx = Vx AND Vy.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t y = (opcode && 0x00F0) >> 4;
+    V[x] &= V[y];
+}
+
+// 8xy3 - XOR Vx, Vy
+void Chip8::OP_8xy3(){ //Set Vx = Vx XOR Vy.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t y = (opcode && 0x00F0) >> 4;
+    V[x] ^= V[y];
+}
+
+// 8xy4 - ADD Vx, Vy
+void Chip8::OP_8xy4(){ //Set Vx = Vx + Vy, set VF = carry.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t y = (opcode && 0x00F0) >> 4;
+
+    if((V[x]+V[y]) > 255){
+        V[0xF] = 1;
+        V[x] = (V[x]+V[y]) & 0xFF;
+    }
+    else{
+        V[0xF] = 0;
+        V[x] += V[y];
+    }
+}
+
+// 8xy5 - SUB Vx, Vy
+void Chip8::OP_8xy5(){ //Set Vx = Vx - Vy, set VF = NOT borrow.
+    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t y = (opcode && 0x00F0) >> 4;
+
+    if(V[x] > V[y]) V[0xF] = 1;
+    else V[0xF] = 0;
+
+    V[x] -= V[y];
+}
