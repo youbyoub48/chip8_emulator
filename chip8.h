@@ -15,7 +15,7 @@ class Chip8{
     uint8_t delay_timer;
     uint8_t sound_timer;
     bool screen[64][32];
-    uint8_t keypad[16];
+    bool keypad[16];
     uint16_t opcode;
     SDL_Window* pWindow{ nullptr };
     SDL_Renderer* pRenderer{ nullptr };
@@ -48,4 +48,15 @@ class Chip8{
         void OP_Bnnn();
         void OP_Cxkk();
         void OP_Dxyn();
+        void OP_Ex9E();
+        void OP_ExA1();
+        void OP_Fx07();
+        void OP_Fx0A();
+        void OP_Fx15();
+        void OP_Fx18();
+        void OP_Fx1E();
+        void OP_Fx29();
+        void OP_Fx33();
+        void OP_Fx55();
+        void OP_Fx65();
 };

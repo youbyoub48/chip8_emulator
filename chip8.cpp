@@ -297,3 +297,84 @@ void Chip8::OP_Dxyn(){ //Display n-byte sprite starting at memory location I at 
         }
     }
 }
+
+// Ex9E - SKP Vx
+void Chip8::OP_Ex9E(){ //Skip next instruction if key with the value of Vx is pressed.
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    if(keypad[V[x]]) pc += 2;
+}
+
+// ExA1 - SKNP Vx
+void Chip8::OP_ExA1(){ //Skip next instruction if key with the value of Vx is not pressed.
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    if(!keypad[V[x]]) pc += 2;
+}
+
+// Fx07 - LD Vx, DT
+void Chip8::OP_Fx07(){ //Set Vx = delay timer value.
+    uint8_t x = (opcode & 0x0F00) >> 8;
+
+    V[x] = delay_timer;
+}
+
+// Fx0A - LD Vx, K
+void Chip8::OP_Fx0A(){ //Wait for a key press, store the value of the key in Vx.
+    uint8_t x = (opcode & 0x0F00) >> 8;
+
+    for(int i=0;i<16;i++){
+        if(keypad[i]){
+            V[x] = i;
+            return;
+        }
+    }
+    pc -= 2;
+}
+
+// Fx15 - LD DT, Vx
+void Chip8::OP_Fx15(){ //Set delay timer = Vx.
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    delay_timer = V[x];
+}
+
+// Fx18 - LD ST, Vx
+void Chip8::OP_Fx18(){ //Set sound timer = Vx.
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    sound_timer = V[x];
+}
+
+// Fx1E - ADD I, Vx
+void Chip8::OP_Fx1E(){ //Set I = I + Vx.
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    I += V[x];
+}
+
+// Fx29 - LD F, Vx
+void Chip8::OP_Fx29(){ //Set I = location of sprite for digit Vx.
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    I = FONTSET_START_ADDRESS+(5*V[x]);
+}
+
+// Fx33 - LD B, Vx
+void Chip8::OP_Fx33(){ //Store BCD representation of Vx in memory locations I, I+1, and I+2.
+    uint8_t x = (opcode & 0x0F00) >> 8;
+
+    memory[I] = V[x]/100;
+    memory[I+1] = (V[x]%100)/10;
+    memory[I+2] = V[x]%10;
+}
+
+// Fx55 - LD [I], Vx
+void Chip8::OP_Fx55(){ //Store registers V0 through Vx in memory starting at location I.
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    for(int i=0;i<=x;i++){
+        memory[I+i] = V[i];
+    }
+}
+
+// Fx65 - LD Vx, [I]
+void Chip8::OP_Fx65(){ //Read registers V0 through Vx from memory starting at location I.
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    for(int i=0;i<=x;i++){
+        V[i] = memory[I+i];
+    }
+}
