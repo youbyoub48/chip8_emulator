@@ -136,68 +136,68 @@ void Chip8::OP_2nnn(){ //Call subroutine at nnn.
 
 // 3xkk - SE Vx, byte
 void Chip8::OP_3xkk(){ //Skip next instruction if Vx = kk.
-    uint8_t x = (opcode && 0x0F00) >> 8;
-    if(V[x] == (opcode && 0x00FF)) pc += 2;
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    if(V[x] == (opcode & 0x00FF)) pc += 2;
 }
 
 // 4xkk - SNE Vx, byte
 void Chip8::OP_4xkk(){ //Skip next instruction if Vx != kk.
-    uint8_t x = (opcode && 0x0F00) >> 8;
-    if(V[x] != (opcode && 0x00FF)) pc += 2;
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    if(V[x] != (opcode & 0x00FF)) pc += 2;
 }
 
 // 5xy0 - SE Vx, Vy
 void Chip8::OP_5xy0(){ //Skip next instruction if Vx = Vy.
-    uint8_t x = (opcode && 0x0F00) >> 8;
-    uint8_t y = (opcode && 0x00F0) >> 4;
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     if(V[x] == V[y]) pc += 2;
 }
 
 // 6xkk - LD Vx, byte
 void Chip8::OP_6xkk(){ //Set Vx = kk.
-    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t x = (opcode & 0x0F00) >> 8;
     V[x] = opcode & 0x00FF;
 }
 
 // 7xkk - ADD Vx, byte
 void Chip8::OP_7xkk(){ //Set Vx = Vx + kk.
-    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t x = (opcode & 0x0F00) >> 8;
     V[x] += opcode & 0x00FF;
 }
 
 // 8xy0 - LD Vx, Vy
 void Chip8::OP_8xy0(){ //Set Vx = Vy.
-    uint8_t x = (opcode && 0x0F00) >> 8;
-    uint8_t y = (opcode && 0x00F0) >> 4;
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    uint8_t y = (opcode & 0x00F0) >> 4;
     V[x] = V[y];
 }
 
 // 8xy1 - OR Vx, Vy
 void Chip8::OP_8xy1(){ //Set Vx = Vx OR Vy.
-    uint8_t x = (opcode && 0x0F00) >> 8;
-    uint8_t y = (opcode && 0x00F0) >> 4;
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    uint8_t y = (opcode & 0x00F0) >> 4;
     V[x] |= V[y];
 }
 
 // 8xy2 - AND Vx, Vy
 void Chip8::OP_8xy2(){ //Set Vx = Vx AND Vy.
-    uint8_t x = (opcode && 0x0F00) >> 8;
-    uint8_t y = (opcode && 0x00F0) >> 4;
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    uint8_t y = (opcode & 0x00F0) >> 4;
     V[x] &= V[y];
 }
 
 // 8xy3 - XOR Vx, Vy
 void Chip8::OP_8xy3(){ //Set Vx = Vx XOR Vy.
-    uint8_t x = (opcode && 0x0F00) >> 8;
-    uint8_t y = (opcode && 0x00F0) >> 4;
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    uint8_t y = (opcode & 0x00F0) >> 4;
     V[x] ^= V[y];
 }
 
 // 8xy4 - ADD Vx, Vy
 void Chip8::OP_8xy4(){ //Set Vx = Vx + Vy, set VF = carry.
-    uint8_t x = (opcode && 0x0F00) >> 8;
-    uint8_t y = (opcode && 0x00F0) >> 4;
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     if((V[x]+V[y]) > 255){
         V[0xF] = 1;
@@ -211,8 +211,8 @@ void Chip8::OP_8xy4(){ //Set Vx = Vx + Vy, set VF = carry.
 
 // 8xy5 - SUB Vx, Vy
 void Chip8::OP_8xy5(){ //Set Vx = Vx - Vy, set VF = NOT borrow.
-    uint8_t x = (opcode && 0x0F00) >> 8;
-    uint8_t y = (opcode && 0x00F0) >> 4;
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     if(V[x] > V[y]) V[0xF] = 1;
     else V[0xF] = 0;
@@ -222,7 +222,7 @@ void Chip8::OP_8xy5(){ //Set Vx = Vx - Vy, set VF = NOT borrow.
 
 // 8xy6 - SHR Vx {, Vy}
 void Chip8::OP_8xy6(){ //Set Vx = Vx SHR 1.
-    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t x = (opcode & 0x0F00) >> 8;
     
     V[0xF] = x & 0xF;
     V[x] >>= 1;
@@ -230,8 +230,8 @@ void Chip8::OP_8xy6(){ //Set Vx = Vx SHR 1.
 
 // 8xy7 - SUBN Vx, Vy
 void Chip8::OP_8xy7(){ //Set Vx = Vy - Vx, set VF = NOT borrow.
-    uint8_t x = (opcode && 0x0F00) >> 8;
-    uint8_t y = (opcode && 0x00F0) >> 4;
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     if(V[y] > V[x]) V[0xF] = 1;
     else V[0xF] = 0;
@@ -241,7 +241,7 @@ void Chip8::OP_8xy7(){ //Set Vx = Vy - Vx, set VF = NOT borrow.
 
 // 8xyE - SHL Vx {, Vy}
 void Chip8::OP_8xyE(){ //Set Vx = Vx SHL 1.
-    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t x = (opcode & 0x0F00) >> 8;
     
     V[0xF] = x & 0xF;
     V[x] <<= 1;
@@ -249,8 +249,8 @@ void Chip8::OP_8xyE(){ //Set Vx = Vx SHL 1.
 
 // 9xy0 - SNE Vx, Vy
 void Chip8::OP_9xy0(){ //Skip next instruction if Vx != Vy.
-    uint8_t x = (opcode && 0x0F00) >> 8;
-    uint8_t y = (opcode && 0x00F0) >> 4;
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     if(V[x] != V[y]) pc += 2;
 }
@@ -268,11 +268,32 @@ void Chip8::OP_Bnnn(){ //Jump to location nnn + V0.
 // Cxkk - RND Vx, byte
 void Chip8::OP_Cxkk(){ //Set Vx = random byte AND kk.
     srand(time(0));
-    uint8_t x = (opcode && 0x0F00) >> 8;
+    uint8_t x = (opcode & 0x0F00) >> 8;
     V[x] = (rand()%256) & (opcode & 0x00FF);
 }
 
 // Dxyn - DRW Vx, Vy, nibble
 void Chip8::OP_Dxyn(){ //Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
-    
+    uint8_t x = (opcode & 0x0F00) >> 8;
+    uint8_t y = (opcode & 0x00F0) >> 4;
+    uint8_t n = opcode & 0x000F;
+    uint8_t sprite,pixel;
+
+    for(int i=0;i<n;i++){
+        sprite = memory[I+i];
+        for(int j=0;j<8;j++){
+            pixel = sprite & (0x80 >> j);
+            
+            if(pixel){
+                if(screen[V[x]+j][V[y]+i]){
+                    V[0xF] = 1;
+                    screen[V[x]+j][V[y]+i] = false;
+                }
+                else{
+                    V[0xF] = 0;
+                    screen[V[x]+j][V[y]+i] = true;
+                }
+            }
+        }
+    }
 }
