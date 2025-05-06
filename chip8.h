@@ -5,6 +5,7 @@
 #define FONTSET_START_ADDRESS 0x50
 #define PIXEL_SIZE 8
 
+
 class Chip8{
     uint8_t V[16];
     uint8_t memory[4096];
@@ -19,12 +20,24 @@ class Chip8{
     uint16_t opcode;
     SDL_Window* pWindow{ nullptr };
     SDL_Renderer* pRenderer{ nullptr };
+    typedef void (Chip8::*Chip8Func)();
+    Chip8Func table[0xF + 1];
+	Chip8Func table0[0xE + 1];
+	Chip8Func table8[0xE + 1];
+	Chip8Func tableE[0xE + 1];
+	Chip8Func tableF[0x65 + 1];
+
     public :
         void loadRom(const char* filename);
         Chip8();
         int screenInit();
         void screenQuit();
         void screenUpdate();
+        void Table0();
+        void Table8();
+        void TableE();
+        void TableF();
+        void OP_NULL();
         void OP_00E0();
         void OP_00EE();
         void OP_1nnn();
