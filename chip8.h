@@ -37,6 +37,7 @@ class Chip8{
         void Table8();
         void TableE();
         void TableF();
+        void Cycle();
         void OP_NULL();
         void OP_00E0();
         void OP_00EE();

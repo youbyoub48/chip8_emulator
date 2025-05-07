@@ -136,6 +136,15 @@ void Chip8::TableF(){
 void Chip8::OP_NULL(){
 }
 
+void Chip8::Cycle(){
+    opcode = (memory[pc] << 8) | memory[pc + 1];
+    pc += 2;
+    (this->*(table[(opcode & 0xF000) >> 12]))();
+
+    if (delay_timer > 0) --delay_timer;
+    if (sound_timer > 0) --sound_timer;
+}
+
 int Chip8::screenInit(){
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
