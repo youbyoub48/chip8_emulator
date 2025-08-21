@@ -1,13 +1,19 @@
 #include "chip8.h"
+#include <iostream>
+#include <chrono>
+
+using namespace std;
 
 int main(int argc, char* argv[])
 {
     Chip8 chip8;
-    chip8.loadRom(argv[1]);
+    int cycleDelay = stoi(argv[1]);
+    chip8.loadRom(argv[2]);
     chip8.screenInit();
     chip8.screenUpdate();
     SDL_Event events;
     bool isOpen{ true };
+    auto lastCycleTime = chrono::high_resolution_clock::now();
 
      while (isOpen)
     {
@@ -21,12 +27,14 @@ int main(int argc, char* argv[])
             }
         }
 
-        for(int compteur=0;compteur<4;compteur++) 
-        { 
+        auto currentTime = chrono::high_resolution_clock::now();
+        float dt = chrono::duration<float, chrono::milliseconds::period>(currentTime - lastCycleTime).count();
+
+        if (dt > cycleDelay){
+            lastCycleTime = currentTime;
             chip8.Cycle(); 
-        } 
-        chip8.screenUpdate();
-        SDL_Delay(16);
+            chip8.screenUpdate();
+        }
     }
 
     chip8.screenQuit();
