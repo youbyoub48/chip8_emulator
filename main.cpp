@@ -17,18 +17,9 @@ int main(int argc, char* argv[])
 
      while (isOpen)
     {
-         while (SDL_PollEvent(&events))
-        {
-            switch (events.type)
-            {
-            case SDL_QUIT:
-                isOpen = false;
-                break;
-            }
-        }
-
         auto currentTime = chrono::high_resolution_clock::now();
         float dt = chrono::duration<float, chrono::milliseconds::period>(currentTime - lastCycleTime).count();
+        isOpen = chip8.Keyboard();
 
         if (dt > cycleDelay){
             lastCycleTime = currentTime;

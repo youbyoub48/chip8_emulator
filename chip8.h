@@ -33,6 +33,7 @@ class Chip8{
         int screenInit();
         void screenQuit();
         void screenUpdate();
+        bool Keyboard();
         void Table0();
         void Table8();
         void TableE();

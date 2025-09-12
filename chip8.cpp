@@ -184,6 +184,124 @@ void Chip8::screenUpdate(){
     SDL_RenderPresent(pRenderer);  
 }
 
+bool Chip8::Keyboard(){
+    SDL_Event events;
+    bool isOpen=true;
+
+    while (SDL_PollEvent(&events)){
+        switch(events.type){
+            case SDL_QUIT:
+                isOpen = false;
+                break;
+            case SDL_KEYDOWN:
+                switch(events.key.keysym.sym){
+                    case SDLK_x:
+                        keypad[0] = true;
+                        break;
+                    case SDLK_1:
+                        keypad[1] = true;
+                        break;
+                    case SDLK_2:
+                        keypad[2] = true;
+                        break;
+                    case SDLK_3:
+                        keypad[3] = true;
+                        break;
+                    case SDLK_q:
+                        keypad[4] = true;
+                        break;
+                    case SDLK_w:
+                        keypad[5] = true;
+                        break;
+                    case SDLK_e:
+                        keypad[6] = true;
+                        break;
+                    case SDLK_a:
+                        keypad[7] = true;
+                        break;
+                    case SDLK_s:
+                        keypad[8] = true;
+                        break;
+                    case SDLK_d:
+                        keypad[9] = true;
+                        break;
+                    case SDLK_z:
+                        keypad[10] = true;
+                        break;
+                    case SDLK_c:
+                        keypad[11] = true;
+                        break;
+                    case SDLK_4:
+                        keypad[12] = true;
+                        break;
+                    case SDLK_r:
+                        keypad[13] = true;
+                        break;
+                    case SDLK_f:
+                        keypad[14] = true;
+                        break;
+                    case SDLK_v:
+                        keypad[15] = true;
+                        break;
+                }
+                break;
+            case SDL_KEYUP:
+                switch(events.key.keysym.sym){
+                    case SDLK_x:
+                        keypad[0] = false;
+                        break;
+                    case SDLK_1:
+                        keypad[1] = false;
+                        break;
+                    case SDLK_2:
+                        keypad[2] = false;
+                        break;
+                    case SDLK_3:
+                        keypad[3] = false;
+                        break;
+                    case SDLK_q:
+                        keypad[4] = false;
+                        break;
+                    case SDLK_w:
+                        keypad[5] = false;
+                        break;
+                    case SDLK_e:
+                        keypad[6] = false;
+                        break;
+                    case SDLK_a:
+                        keypad[7] = false;
+                        break;
+                    case SDLK_s:
+                        keypad[8] = false;
+                        break;
+                    case SDLK_d:
+                        keypad[9] = false;
+                        break;
+                    case SDLK_z:
+                        keypad[10] = false;
+                        break;
+                    case SDLK_c:
+                        keypad[11] = false;
+                        break;
+                    case SDLK_4:
+                        keypad[12] = false;
+                        break;
+                    case SDLK_r:
+                        keypad[13] = false;
+                        break;
+                    case SDLK_f:
+                        keypad[14] = false;
+                        break;
+                    case SDLK_v:
+                        keypad[15] = false;
+                        break;
+                }
+                break;
+        }
+    }
+    return isOpen;
+}
+
 //Instruction function
 
 // 00E0 - CLS
